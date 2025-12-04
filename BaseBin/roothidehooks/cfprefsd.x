@@ -72,7 +72,7 @@ BOOL new_CFPrefsGetPathForTriplet(CFStringRef identifier, CFStringRef user, BOOL
 
 		if (needsRedirection) {
 			if(gCurrentClientPid>0 && jbclient_blacklist_check_pid(gCurrentClientPid)==true) {
-				NSLog(@"CFPrefsGetPathForTriplet deny redirection for process (%d) %s", gCurrentClientPid, proc_get_path(gCurrentClientPid,NULL));
+				NSLog(@"CFPrefsGetPathForTriplet deny redirection for process (%d) %s", gCurrentClientPid, proc_get_path(gCurrentClientPid,NULL)?:"");
 				needsRedirection = NO;
 			}
 		}
@@ -109,7 +109,7 @@ void* new__CFPrefsDaemon_handleMessage_fromPeer_replyHandler__(id self, xpc_obje
     uid_t clientUid = xpc_connection_get_euid(connection);
     pid_t clientPid = xpc_connection_get_pid(connection);
 
-	NSLog(@"CFPrefsDaemon: handleMessage %p/%d pid=%d uid=%d proc=%s", message, xpc_get_type(message)==XPC_TYPE_DICTIONARY, clientPid, clientUid, proc_get_path(clientPid,NULL));
+	NSLog(@"CFPrefsDaemon: handleMessage %p/%d pid=%d uid=%d proc=%s", message, xpc_get_type(message)==XPC_TYPE_DICTIONARY, clientPid, clientUid, proc_get_path(clientPid,NULL)?:"");
 
 	// char* desc = xpc_copy_description(message);
 	// NSLog(@"CFPrefsDaemon: handleMessage Operation=%lld, msg=%s", xpc_dictionary_get_int64(message, "CFPreferencesOperation"), desc);

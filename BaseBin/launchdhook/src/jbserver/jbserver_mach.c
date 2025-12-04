@@ -45,7 +45,7 @@ int jbserver_send_mach_reply(mach_msg_header_t *hdr, void *replyData)
 
 int jbserver_received_mach_message(audit_token_t *auditToken, struct jbserver_mach_msg *jbsMachMsg)
 {
-	JBLogDebug("jbserver received mach message(%d) from (%d) %s", jbsMachMsg->action, audit_token_to_pid(*auditToken), proc_get_path(audit_token_to_pid(*auditToken),NULL));
+	JBLogDebug("jbserver received mach message(%d) from (%d) %s", jbsMachMsg->action, audit_token_to_pid(*auditToken), proc_get_path(audit_token_to_pid(*auditToken),NULL)?:"");
 
 	int r = -1;
 

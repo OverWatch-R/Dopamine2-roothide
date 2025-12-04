@@ -732,7 +732,7 @@ int proc_patch_dyld_internal(pid_t pid, bool spinlockFixOnly)
             void* resignedPC = ptrauth_sign_unauthenticated((void*)strippedPC, ptrauth_key_process_independent_code, 0);
             __darwin_arm_thread_state64_set_pc_fptr(threadState, resignedPC);
             if(threadState.__opaque_pc != savedPC) {
-                JBLogDebug("target process(%d) used a different pac key, %s", pid, proc_get_path(pid,NULL));
+                JBLogDebug("target process(%d) used a different pac key, %s", pid, proc_get_path(pid,NULL)?:"");
 
                 cs_allow_invalid(bsd_proc, false);
 

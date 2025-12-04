@@ -82,7 +82,7 @@ static const void *kBlockSchemeTagKey = &kBlockSchemeTagKey;
 	{
 		pid_t pid = connection.processIdentifier;
 
-		NSLog(@"canOpenURL:%@ publicSchemes:%d privateSchemes:%d XPCConnection:%@ proc:%d,%s", url, ispublic, isprivate, connection, pid, proc_get_path(pid,NULL));
+		NSLog(@"canOpenURL:%@ publicSchemes:%d privateSchemes:%d XPCConnection:%@ proc:%d,%s", url, ispublic, isprivate, connection, pid, proc_get_path(pid,NULL)?:"");
 		//if(connection) NSLog(@"canOpenURL connection=%@", connection);
 
 		if(jbclient_blacklist_check_pid(pid)==true)
@@ -130,7 +130,7 @@ static const void *kBlockSchemeTagKey = &kBlockSchemeTagKey;
 		return result;
 	}
 
-	NSLog(@"_resolveQueries:%@:%@ XPCConnection:%@ result=%@/%ld proc:%d,%s", [queries class], queries, connection, result.class, result.count, pid, proc_get_path(pid,NULL));
+	NSLog(@"_resolveQueries:%@:%@ XPCConnection:%@ result=%@/%ld proc:%d,%s", [queries class], queries, connection, result.class, result.count, pid, proc_get_path(pid,NULL)?:"");
 	//NSLog(@"result=%@, %@", result.allKeys, result.allValues);
 	for(id key in result)
 	{

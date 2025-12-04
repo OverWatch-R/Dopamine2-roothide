@@ -37,7 +37,7 @@ void jailbreakd_received_message(mach_port_t port)
 			pid_t clientPid = audit_token_to_pid(auditToken);
 
 			char* desc = NULL;
-			JBLogDebug("received message %d from %d(%s) with dictionary: %s", msgId, clientPid, proc_get_path(clientPid,NULL), (desc=xpc_copy_description(message)));
+			JBLogDebug("received message %d from %d(%s) with dictionary: %s", msgId, clientPid, proc_get_path(clientPid,NULL)?:"", (desc=xpc_copy_description(message)));
 			if(desc) free(desc);
 
 			switch (msgId) {
@@ -47,7 +47,7 @@ void jailbreakd_received_message(mach_port_t port)
 					bool resume = xpc_dictionary_get_bool(message, "resume");
 					pid_t ppid = proc_get_ppid(pid);
 					if(ppid == clientPid) {
-						JBLogDebug("spinlock fix: client pid=%d, child pid=%d, child's parent pid=%d, child proc=%s", clientPid, pid, ppid, proc_get_path(pid,NULL));
+						JBLogDebug("spinlock fix: client pid=%d, child pid=%d, child's parent pid=%d, child proc=%s", clientPid, pid, ppid, proc_get_path(pid,NULL)?:"");
 
 						if(proc_fix_spinlock(pid) == 0) {
 							if(resume) kill(pid, SIGCONT);
@@ -70,7 +70,7 @@ void jailbreakd_received_message(mach_port_t port)
 					bool resume = xpc_dictionary_get_bool(message, "resume");
 					pid_t ppid = proc_get_ppid(pid);
 					if(ppid == clientPid) {
-						JBLogDebug("spawn patch: client pid=%d, child pid=%d, child's parent pid=%d, child proc=%s", clientPid, pid, ppid, proc_get_path(pid,NULL));
+						JBLogDebug("spawn patch: client pid=%d, child pid=%d, child's parent pid=%d, child proc=%s", clientPid, pid, ppid, proc_get_path(pid,NULL)?:"");
 
 						if(roothide_patch_proc(pid) == 0) {
 							if(resume) kill(pid, SIGCONT);
@@ -148,7 +148,7 @@ void jailbreakd_received_message(mach_port_t port)
 
 				case JBD_MSG_TEST_CALL: {
 					int value = xpc_dictionary_get_int64(message, "value");
-					JBLogDebug("jailbreakd test call(%llu) from %d,%s", value, clientPid, proc_get_path(clientPid,NULL));	
+					JBLogDebug("jailbreakd test call(%llu) from %d,%s", value, clientPid, proc_get_path(clientPid,NULL)?:"");	
 					xpc_dictionary_set_int64(reply, "result", value * 2);
 					
 					if(clientUid == 0) {
